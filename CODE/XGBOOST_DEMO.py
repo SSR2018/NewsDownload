@@ -6,7 +6,7 @@ import os
 import graphviz
 #找到所有csv文件
 listdir = []
-for dir in os.listdir('../'):
+for dir in os.listdir('../../'):
     if dir[-3:] == 'csv':
         listdir.append('./'+dir)
 #读取文件

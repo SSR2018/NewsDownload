@@ -24,7 +24,7 @@ for id,index in enumerate(pre):
         libsvm_+='{}:{}:1,'.format(it+1,di[it][col])
     libsvm +=str(label[id])+','+libsvm_+'\n'
 
-with open('ffm.txt', 'w+') as f:
+with open('../ffm.txt', 'w+') as f:
     f.write(libsvm)
 
 model = xlearn.create_ffm()
