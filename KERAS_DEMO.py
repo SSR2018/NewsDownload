@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 print(keras.__version__)
 
 time_step = 3
-df = pd.read_csv('../601318.csv')
+df = pd.read_csv('601318.csv')
 y = df.close[:-4].values
 dff =df.copy(deep=True)
 dff = dff.drop(['close'],axis = 1)

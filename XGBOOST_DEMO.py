@@ -5,18 +5,27 @@ import matplotlib.pyplot as plt
 import os
 import graphviz
 #找到所有csv文件
+
+os.chdir('./NewsDownload/')
 listdir = []
-for dir in os.listdir('../../'):
+for dir in os.listdir('./'):
     if dir[-3:] == 'csv':
         listdir.append('./'+dir)
+print(listdir)
 #读取文件
-df = pd.read_csv(listdir[0],)
-print(df.columns)
-
-#建立想，有，
-theta = 1
-x = df.iloc[1:,2:].values
-y = df['pct_chg'].map(lambda x:0 if x < theta else 1).values[:-1]
+data = pd.DataFrame({})
+for li in listdir:
+    df = pd.read_csv(li)
+    # print(df.columns)
+    #建立
+    theta = df.pct_chg.abs().mean()
+    print(theta)
+    df.pct_chg =  df['pct_chg'].map(lambda x:0 if abs(x) < theta else 1)
+    data = pd.concat([data,df])
+y = data.pct_chg[:-1].values
+# x = data.copy(deep=True)
+# x = x.drop(['pct_chg'],axis=1)
+x = data.iloc[1:,2:].values
 np.savetxt('./label.txt',y)
 print('x:',x.shape,'y:',y.shape)
 
@@ -38,7 +47,7 @@ params = {'booster': 'gbtree',
           'silent': 0}
 
 model = xgb.train(params=params,dtrain = dtrain,evals = [(dtrain,'train')]\
-                  ,num_boost_round=100,verbose_eval=10)
+                  ,num_boost_round=50,verbose_eval=10)
 
 pre_y = model.predict(dtest,pred_leaf = True)
 np.savetxt('./pre.txt',pre_y)
